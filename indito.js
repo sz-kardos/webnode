@@ -9,14 +9,14 @@ const PORT = 3000;
 // Middleware
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
-app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static(path.join(__dirname, 'public'))); // Pontosítva a statikus fájlok útvonalát
 
 // MySQL adatbázis kapcsolat
 const db = mysql.createConnection({
-  host: 'localhost',
-  user: 'root',
-  password: '',
-  database: 'db023',
+  host: 'localhost', // Cseréld ki a megfelelő IP-re, ha nem lokális
+  user: 'root', // Adatbázis felhasználónév
+  password: '', // Adatbázis jelszó
+  database: 'db023', // Adatbázis neve
 });
 
 // Adatbázis kapcsolódás ellenőrzése
@@ -28,14 +28,14 @@ db.connect(err => {
   console.log('Sikeres adatbázis kapcsolat!');
 });
 
-// Kapcsolat oldal GET route
+// "Kapcsolatok" oldal route (HTML oldal megjelenítése)
 app.get('/kapcsolat', (req, res) => {
   const filePath = path.join(__dirname, 'views', 'kapcsolat.html');
-  console.log('Kapcsolat fájl elérési út:', filePath);
+  console.log('Kapcsolat fájl elérési út:', filePath); // Debugginghoz
   res.sendFile(filePath);
 });
 
-// Kapcsolat adatbeküldés POST route
+// "Kapcsolatok" adatbeküldés route (POST metódus)
 app.post('/kapcsolat', (req, res) => {
   const { name, email, subject, message } = req.body;
 
@@ -49,13 +49,15 @@ app.post('/kapcsolat', (req, res) => {
       console.error('Hiba az adatbázisban:', err);
       return res.status(500).send('Adatbázis hiba történt!');
     }
+
     res.send('Üzenet sikeresen elküldve!');
   });
 });
 
-// Főoldal GET route
+// "Főoldal" route
 app.get('/', (req, res) => {
   const filePath = path.join(__dirname, 'views', 'home.html');
+  console.log('Főoldal fájl elérési út:', filePath); // Debugginghoz
   res.sendFile(filePath);
 });
 
