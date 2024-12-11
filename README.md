@@ -6,11 +6,11 @@ Kardos Szabina
 Moziműsor
 
     Megvalósítandó feladatok:
-    Kapcsolat kiépítése a Linux szerverrel (8023)
+    Kapcsolat kiépítése a Linux szerverrel (${8023})
     Reszponzív téma alkalmazása 
-    Főoldal menü 🎞
+    Főoldal menü 
     Adatbázis menü 
     Kapcsolat menü 
-    Üzenetek menü ✉
+    Üzenetek menü 
     CRUD menü 
     OOP-Javascript menü 
