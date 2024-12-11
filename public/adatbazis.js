@@ -6,7 +6,7 @@ router.get('/', (req, res) => {
   var con = mysql.createConnection({
     host: 'localhost',
     user: 'studb023',
-    password: 'jelszo',
+    password: 'abc123',
     database: 'db023'
   });
 
@@ -23,10 +23,6 @@ router.get('/', (req, res) => {
         <html lang="hu">
         <head>
           <title>Adatbázis</title>
-          <meta charset="utf-8" />
-          <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
-          <link rel="stylesheet" href="/assets/css/main.css" />
-          <noscript><link rel="stylesheet" href="/assets/css/noscript.css" /></noscript>
           <style>
             select, option {
               color: black;
@@ -34,21 +30,21 @@ router.get('/', (req, res) => {
             table th {
               text-align: center;
               color: black;
-              font-size: 1.5em; /* Betűméret növelése */
+              font-size: 1.5em; 
             }
             table td {
               color: black;
             }
           </style>
         </head>
-        <body class="is-preload" style="background: url('/images/hatter.jpg') no-repeat center center fixed; background-size: cover; color: #fff; position: relative;">
+        <body>
 
           <!-- Wrapper -->
           <div id="wrapper" class="fade-in">
 
             <!-- Header -->
             <header id="header">
-              <a href="/" class="logo">Budapesti Mozi Műsor</a>
+              <a href="/" class="navbar-brand">Mozi Világ</a>
             </header>
 
             <!-- Nav -->
@@ -74,36 +70,11 @@ router.get('/', (req, res) => {
                   <select name="mozi" id="mozi">
                     ${options}
                   </select>
-                  <button type="submit">Listázd ki a jelenleg itt játszott filmeket!</button>
+                  <button type="submit">Listázd ki a  filmeket!</button>
                 </form>
               </article>
             </div>
-
-            <!-- Footer -->
-            <footer id="footer">
-              <section class="split contact">
-                <section class="alt">
-                  <h3>Készítette: </h3>
-                  <p>Dunai Valéria</p>
-                </section>
-                <section class="alt">
-                  <h3>NJE </h3>
-                  <p>webprogramozás II LA-02</p>
-                </section>
-                <section>
-                  <h3>NEPTUN kód: </h3>
-                  <p>VVXZPP</p>
-                </section>
-              </section>
-            </footer>
           </div>
-
-          <!-- Scripts -->
-          <script src="/assets/js/jquery.min.js"></script>
-          <script src="/assets/js/browser.min.js"></script>
-          <script src="/assets/js/breakpoints.min.js"></script>
-          <script src="/assets/js/util.js"></script>
-          <script src="/assets/js/main.js"></script>
         </body>
         </html>
       `);
@@ -115,9 +86,9 @@ router.post('/filmek', (req, res) => {
   var moziNev = req.body.mozi;
   var con = mysql.createConnection({
     host: 'localhost',
-    user: 'studb012',
-    password: 'PaSsWoRd13',
-    database: 'db012'
+    user: 'studb023',
+    password: 'abc123',
+    database: 'db023'
   });
 
   con.connect(function(err) {
@@ -133,7 +104,7 @@ router.post('/filmek', (req, res) => {
       if (err) throw err;
       var filmek = "";
       if (result.length === 0) {
-        filmek = `<tr><td>Jelenleg ebben a moziban nem játszanak filmeket. 😔</td></tr>`;
+        filmek = `<tr><td>Jelenleg  nem játszanak filmeket.</td></tr>`;
       } else {
       for (var i = 0; i < result.length; i++) {
         filmek += `<tr><td>${result[i].filmcim}</td></tr>`;
@@ -144,10 +115,6 @@ router.post('/filmek', (req, res) => {
         <html lang="hu">
         <head>
           <title>Adatbázis</title>
-          <meta charset="utf-8" />
-          <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
-          <link rel="stylesheet" href="/assets/css/main.css" />
-          <noscript><link rel="stylesheet" href="/assets/css/noscript.css" /></noscript>
           <style>
             select, option {
               color: black;
@@ -155,21 +122,21 @@ router.post('/filmek', (req, res) => {
             table th {
               text-align: center;
               color: black;
-              font-size: 1.5em; /* Betűméret növelése */
+              font-size: 1.5em; 
             }
             table td {
               color: black;
             }
           </style>
         </head>
-        <body class="is-preload" style="background: url('/images/hatter.jpg') no-repeat center center fixed; background-size: cover; color: #fff; position: relative;">
+        <body>
 
           <!-- Wrapper -->
           <div id="wrapper" class="fade-in">
 
             <!-- Header -->
             <header id="header">
-              <a href="/" class="logo">Budapesti Mozi Műsor</a>
+              <a href="/" class="navbar-brand">Mozi Világ</a>
             </header>
 
             <!-- Nav -->
@@ -200,13 +167,6 @@ router.post('/filmek', (req, res) => {
               </article>
             </div>
           </div>
-
-          <!-- Scripts -->
-          <script src="/assets/js/jquery.min.js"></script>
-          <script src="/assets/js/browser.min.js"></script>
-          <script src="/assets/js/breakpoints.min.js"></script>
-          <script src="/assets/js/util.js"></script>
-          <script src="/assets/js/main.js"></script>
         </body>
         </html>
       `);

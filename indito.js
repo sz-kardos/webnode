@@ -1,67 +1,31 @@
 const express = require('express');
-const bodyParser = require('body-parser');
-const mysql = require('mysql2');
 const path = require('path');
-
+const bodyParser = require('body-parser');
+const adatbazisRouter = require('./public/adatbazis'); // Importáljuk az adatb függvényt
 const app = express();
-const PORT = 3000;
+const port = 8023;
 
-// Middleware
+const kapcsolatRouter = require('./public/kapcsolat');
+const uzenetekRouter = require('./public/uzenetek');
+const crudRouter = require('./public/crud');
+const oopRouter = require('./public/oop');
+
 app.use(bodyParser.urlencoded({ extended: true }));
-app.use(bodyParser.json());
-app.use(express.static(path.join(__dirname, 'public'))); // Pontosítva a statikus fájlok útvonalát
+app.use(bodyParser.json()); // Hozzáadva a JSON kezeléshez
+app.use('/assets', express.static(path.join(__dirname, 'assets')));
+app.use('/style.css', express.static(path.join(__dirname, 'style.css')));
+app.use('/images', express.static(path.join(__dirname, 'images'))); 
 
-// MySQL adatbázis kapcsolat
-const db = mysql.createConnection({
-  host: 'localhost', // Cseréld ki a megfelelő IP-re, ha nem lokális
-  user: 'root', // Adatbázis felhasználónév
-  password: '', // Adatbázis jelszó
-  database: 'db023', // Adatbázis neve
-});
-
-// Adatbázis kapcsolódás ellenőrzése
-db.connect(err => {
-  if (err) {
-    console.error('Adatbázis kapcsolat hiba:', err);
-    process.exit();
-  }
-  console.log('Sikeres adatbázis kapcsolat!');
-});
-
-// "Kapcsolatok" oldal route (HTML oldal megjelenítése)
-app.get('/kapcsolat', (req, res) => {
-  const filePath = path.join(__dirname, 'views', 'kapcsolat.html');
-  console.log('Kapcsolat fájl elérési út:', filePath); // Debugginghoz
-  res.sendFile(filePath);
-});
-
-// "Kapcsolatok" adatbeküldés route (POST metódus)
-app.post('/kapcsolat', (req, res) => {
-  const { name, email, subject, message } = req.body;
-
-  if (!name || !email || !subject || !message) {
-    return res.status(400).send('Minden mezőt ki kell tölteni!');
-  }
-
-  const sql = 'INSERT INTO messages (name, email, subject, message, created_at) VALUES (?, ?, ?, ?, NOW())';
-  db.query(sql, [name, email, subject, message], (err, result) => {
-    if (err) {
-      console.error('Hiba az adatbázisban:', err);
-      return res.status(500).send('Adatbázis hiba történt!');
-    }
-
-    res.send('Üzenet sikeresen elküldve!');
-  });
-});
-
-// "Főoldal" route
 app.get('/', (req, res) => {
-  const filePath = path.join(__dirname, 'views', 'home.html');
-  console.log('Főoldal fájl elérési út:', filePath); // Debugginghoz
-  res.sendFile(filePath);
+  res.sendFile(path.join(__dirname, 'index.html'));
 });
 
-// Szerver indítása
-app.listen(PORT, () => {
-  console.log(`Szerver fut: http://localhost:${PORT}`);
+app.use('/adatbazis', adatbazisRouter);
+app.use('/kapcsolat', kapcsolatRouter);
+app.use('/uzenetek', uzenetekRouter);
+app.use('/crud', crudRouter);
+app.use('/oop', oopRouter);
+
+app.listen(port, () => {
+  console.log(`Server is running at http://localhost:${port}`);
 });

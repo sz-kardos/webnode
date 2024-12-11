@@ -117,7 +117,7 @@ router.get('/', (req, res) => {
       <div id="wrapper">
         <!-- Header -->
         <header id="header">
-          <a href="/" class="logo">Mozi Világ</a>
+          <a href="/" class="navbar-brand">Mozi Világ</a>
         </header>
 
         <!-- Nav -->
@@ -156,7 +156,7 @@ router.post('/', (req, res) => {
   var con = mysql.createConnection({
     host: 'localhost',
     user: 'studb023',
-    password: 'PaSsWoRd23',
+    password: 'abc123',
     database: 'db023'
   });
 
