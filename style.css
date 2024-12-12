@@ -1,0 +1,76 @@
+body {
+  font-family: Arial, sans-serif;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  height: 100vh;
+  margin: 0;
+  background: url('/images/hatter.jpg') no-repeat center center fixed;
+  background-size: cover;
+  background-blend-mode: overlay;
+}
+nav, footer {
+  background-color: rgba(51, 51, 51, 0.8);
+  color: white;
+  padding: 1em;
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  position: fixed;
+  left: 0;
+}
+nav {
+  top: 0;
+  display: flex;
+  justify-content: center; /* Középre igazítja a menü elemeit */
+}
+nav a {
+  color: white;
+  margin: 0 1em;
+  text-decoration: none;
+}
+footer {
+  bottom: 0;
+}
+footer p {
+  color: white;
+  margin: 0 1em;
+}
+main {
+  margin-top: 4em; 
+  margin-bottom: 6em;
+  text-align: center;
+  background-color: rgba(255, 255, 255, 0.8);
+  padding: 1em;
+  border-radius: 8px;
+  position: relative;
+}
+.mozi1 {
+  width: 150px; 
+  margin-top: 1em; 
+}
+.mozi2-left, .mozi2-right {
+  width: 50px; 
+  height: auto;
+  margin: 0 2em; 
+}
+.mozi2-left {
+  order: -1;
+}
+table {
+  margin: 0 auto; /* Középre igazítja a táblázatot */
+  border-collapse: collapse;
+  width: 80%; 
+  max-height: 300px; 
+  overflow-y: auto; /* Engedélyezi a függőleges görgetést */
+  display: block; /* Biztosítja, hogy a táblázat görgethető legyen */
+}
+th, td {
+  border: 1px solid #ddd;
+  padding: 8px;
+  text-align: center; /* Középre igazítja a szöveget a táblázat celláiban */
+}
+th {
+  background-color: #f2f2f2;
+}
