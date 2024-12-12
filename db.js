@@ -13,7 +13,7 @@ function adatb(callback) {
 var con = mysql.createConnection({
    host     : 'localhost',
    user     : 'studb023',
-   password : 'abc123',
+   password : '',
    database : 'db023'
 });
 con.connect(function(err){

@@ -7,11 +7,11 @@
     "nodejs": "^0.0.0"
   },
   "scripts": {
-    "start": "node server.js"
+    "start": "node indito.js"
   },
   "name": "web2nod",
   "version": "1.0.0",
-  "main": "server.js",
+  "main": "indito.js",
   "keywords": [],
   "author": "",
   "license": "ISC",
