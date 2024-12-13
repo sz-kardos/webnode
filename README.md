@@ -1,7 +1,8 @@
                                             WEB-programozás II. LA02 beadandó
 
 Készítette:
-Kardos Szabina
+Kardos Szabina 
+student023
 
 Moziműsor
 
