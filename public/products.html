@@ -1,0 +1,157 @@
+<!DOCTYPE HTML>
+<html>
+
+<head>
+    <title>Kapcsolat - Mozi műsor</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+    <link rel="stylesheet" href="assets/css/main.css" />
+</head>
+
+<body class="is-preload">
+    <div id="page-wrapper">
+
+        <!-- Header -->
+        <header id="header">
+            <h1><a href="index.html">Mozi</a></h1>
+            <nav id="nav">
+                <ul>
+                    <li><a href="index.html">Főoldal</a></li>
+                    <li>
+                        <a href="#" class="icon solid fa-angle-down">Menü</a>
+                        <ul>
+                            <li><a href="generic.html">Rólunk</a></li>
+                            <li><a href="contact.html">Kapcsolat</a></li>
+                            <li><a href="elements.html">Elements</a></li>
+                            <li><a href="products.html">Filmek</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </nav>
+        </header>
+
+        <!-- Filmek lista -->
+        <section id="main" class="container">
+            <h2>Itt találhatók a filmek!</h2>
+            <div class="row">
+                <div class="col-12 col-12-narrower">
+                    <section class="box special">
+                        <h3>Előadás</h3>
+                        <table id="eloadas-table" border="1">
+                            <thead>
+                                <tr>
+                                    <th>Film cím</th>
+                                    <th>Műfaj</th>
+                                    <th>Dátum</th>
+                                    <th>Nézőszám</th>
+                                    <th>Bevétel</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- Dinamikusan töltjük be az adatokat -->
+                            </tbody>
+                        </table>
+                    </section>
+                </div>
+
+                <div class="col-12 col-12-narrower">
+                    <section class="box special">
+                        <h3>Film</h3>
+                        <table id="film-table" border="1">
+                            <thead>
+                                <tr>
+                                    <th>Filmcím</th>
+                                    <th>Műfaj</th>
+                                    <th>Hossz</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- Dinamikusan töltjük be az adatokat -->
+                            </tbody>
+                        </table>
+                    </section>
+                </div>
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <footer id="footer">
+            <ul class="icons">
+                <li><a href="#" class="icon brands fa-twitter"><span class="label">Twitter</span></a></li>
+                <li><a href="#" class="icon brands fa-facebook-f"><span class="label">Facebook</span></a></li>
+                <li><a href="#" class="icon brands fa-instagram"><span class="label">Instagram</span></a></li>
+                <li><a href="#" class="icon brands fa-github"><span class="label">Github</span></a></li>
+                <li><a href="#" class="icon brands fa-dribbble"><span class="label">Dribbble</span></a></li>
+                <li><a href="#" class="icon brands fa-google-plus"><span class="label">Google+</span></a></li>
+            </ul>
+            <ul class="copyright">
+                <h1>Készítette: Kardos Szabina</h1>
+                <li>&copy; Untitled. All rights reserved.</li>
+                <li>Design: <a href="http://html5up.net">HTML5 UP</a></li>
+            </ul>
+        </footer>
+
+    </div>
+
+    <!-- Scripts -->
+    <script src="assets/js/jquery.min.js"></script>
+    <script src="assets/js/jquery.dropotron.min.js"></script>
+    <script src="assets/js/jquery.scrollex.min.js"></script>
+    <script src="assets/js/browser.min.js"></script>
+    <script src="assets/js/breakpoints.min.js"></script>
+    <script src="assets/js/util.js"></script>
+    <script src="assets/js/main.js"></script>
+
+    <!-- JavaScript kód -->
+    <script>
+        window.onload = function () {
+            const filmUrl = 'http://143.47.98.96:8039/film';
+            const eloadasUrl = 'http://143.47.98.96:8039/eloadas';
+
+            Promise.all([fetch(filmUrl), fetch(eloadasUrl)])
+                .then(responses => Promise.all(responses.map(response => response.json())))
+                .then(data => {
+                    const filmek = data[0];
+                    const eloadasok = data[1];
+
+                    const eloadasTable = document.getElementById('eloadas-table');
+                    if (eloadasTable) {
+                        eloadasok.forEach(eloadas => {
+                            const film = filmek.find(film => film.id == eloadas.filmid);
+
+                            const row = eloadasTable.insertRow();
+                            const cell1 = row.insertCell(0);
+                            const cell2 = row.insertCell(1);
+                            const cell3 = row.insertCell(2);
+                            const cell4 = row.insertCell(3);
+                            const cell5 = row.insertCell(4);
+
+                            cell1.textContent = film ? film.filmcim : 'N/A';
+                            cell2.textContent = film ? film.mufaj : 'N/A';
+                            cell3.textContent = eloadas.datum || 'N/A';
+                            cell4.textContent = eloadas.nezoszam ? `${eloadas.nezoszam} fő` : 'N/A';
+                            cell5.textContent = eloadas.bevetel ? `${eloadas.bevetel} HUF` : 'N/A';
+                        });
+                    }
+
+                    const filmTable = document.getElementById('film-table');
+                    if (filmTable) {
+                        filmek.forEach(film => {
+                            const row = filmTable.insertRow();
+                            const cell1 = row.insertCell(0);
+                            const cell2 = row.insertCell(1);
+                            const cell3 = row.insertCell(2);
+
+                            cell1.textContent = film.filmcim;
+                            cell2.textContent = film.mufaj || 'N/A';
+                            cell3.textContent = film.hossz ? `${film.hossz} perc` : 'N/A';
+                        });
+                    }
+                })
+                .catch(error => console.error('Hiba az adatok lekérése során:', error));
+        };
+    </script>
+
+</body>
+
+</html>

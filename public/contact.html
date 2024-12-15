@@ -1,0 +1,332 @@
+<!DOCTYPE HTML>
+<html lang="hu">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+    <title>Kapcsolat - Mozi műsor</title>
+    <link rel="stylesheet" href="assets/css/main.css" />
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f7f6;
+            margin: 0;
+            padding: 0;
+            color: #333;
+        }
+
+        h1 {
+            text-align: center;
+            margin-top: 30px;
+            color: #808080; 
+        }
+
+        table {
+            width: 80%;
+            margin: 30px auto;
+            border-collapse: collapse;
+            background-color: #fff;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        thead {
+            background-color: #ebebeb;
+            color: white;
+        }
+
+        th,
+        td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        th {
+            font-size: 16px;
+            font-weight: bold;
+        }
+
+        td {
+            font-size: 14px;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+
+        tr:hover {
+            background-color: #f1f1f1;
+        }
+
+        button {
+            padding: 8px 16px;
+            font-size: 14px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .modify-btn {
+            background-color: #28a745;
+            color: white;
+        }
+
+        .delete-btn {
+            background-color: #dc3545;
+            color: white;
+        }
+
+        .modify-btn:hover {
+            background-color: #218838;
+        }
+
+        .delete-btn:hover {
+            background-color: #c82333;
+        }
+
+        nav ul ul {
+            display: none;
+            position: absolute;
+            background: #999;
+            padding: 10px;
+            border-radius: 4px;
+        }
+
+        nav ul li:hover ul {
+            display: block;
+        }
+
+        nav ul ul li {
+            width: 150px;
+        }
+
+        @media (max-width: 768px) {
+            table {
+                width: 100%;
+                margin: 20px;
+            }
+
+            th,
+            td {
+                font-size: 12px;
+                padding: 10px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div id="page-wrapper">
+        <!-- Header -->
+        <header id="header">
+            <h1><a href="index.html">Mozi műsor</a></h1>
+            <nav id="nav">
+                <ul>
+                    <li><a href="index.html">Főoldal</a></li>
+                    <li>
+                        <a href="#" class="icon solid fa-angle-down">Menü</a>
+                        <ul>
+                            <li><a href="generic.html">Rólunk</a></li>
+                            <li><a href="contact.html">Kapcsolat</a></li>
+                            <li><a href="elements.html">Elements</a></li>
+                            <li><a href="products.html">Filmek</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </nav>
+        </header>
+
+        <!-- Main -->
+        <section id="main" class="container medium">
+            <header>
+                <h2>Kapcsolat</h2>
+                <p>Írd le a véleményed.</p>
+            </header>
+            <div class="box">
+                <form method="post" action="#" id="message-form">
+                    <div class="row gtr-50 gtr-uniform">
+                        <div class="col-6 col-12-mobilep">
+                            <input type="text" name="name" id="name" placeholder="Név" required />
+                        </div>
+                        <div class="col-6 col-12-mobilep">
+                            <input type="email" name="email" id="email" placeholder="Email" required />
+                        </div>
+                        <div class="col-12">
+                            <textarea name="message" id="message" placeholder="Üzenet" rows="6" required></textarea>
+                        </div>
+                        <div class="col-12">
+                            <ul class="actions special">
+                                <li><input type="submit" value="Üzenet küldése" id="submit-message" /></li>
+                            </ul>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </section>
+
+        <!-- Tábla a beérkezett üzenetek kiírására -->
+        <h1>Beérkezett Üzenetek</h1>
+        <table id="crud-table">
+            <thead>
+                <tr>
+                    <th style="display: none;">ID</th>
+                    <th>Név</th>
+                    <th>Email</th>
+                    <th>Küldés Ideje</th>
+                    <th>Szerkesztés</th>
+                    <th>Törlés</th>
+                </tr>
+            </thead>
+            <tbody id="table-body">
+                <!-- Dinamikus adatbetöltés -->
+            </tbody>
+        </table>
+    </div>
+
+    <script>
+        const API_BASE = 'http://143.47.98.96:8023';
+
+        document.addEventListener('DOMContentLoaded', function () {
+            const tableBody = document.getElementById('table-body');
+
+            // 'uzenetek' tábla beolvasása a db023.sql-ből
+            fetch(`${API_BASE}/uzenetek`)
+                .then(response => response.json())
+                .then(data => {
+                    data.forEach(row => {
+                        const tr = document.createElement('tr');
+                        tr.setAttribute('data-id', row.id);
+                        tr.innerHTML = `
+                            <td style="display: none;">${row.id}</td>
+                            <td>${row.nev}</td>
+                            <td>${row.email}</td>
+                            <td>${formatDate(row.kuldes_ideje)}</td>
+                            <td><button class="modify-btn" onclick="handleModify(${row.id})">Módosít</button></td>
+                            <td><button class="delete-btn" onclick="handleDelete(${row.id})">Törlés</button></td>
+                        `;
+                        tableBody.appendChild(tr);
+                    });
+                })
+                .catch(error => console.error('Hiba az adatok betöltése során:', error));
+        });
+
+        function formatDate(isoString) {
+    const date = new Date(isoString);
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0'); // Months are 0-based
+    const day = String(date.getDate()).padStart(2, '0');
+    const hours = String(date.getHours()).padStart(2, '0');
+    const minutes = String(date.getMinutes()).padStart(2, '0');
+    return `${year}-${month}-${day} ${hours}:${minutes}`;
+}
+
+        function handleDelete(id) {
+            if (confirm('Biztosan törölni szeretnéd ezt a sort?')) {
+                fetch(`${API_BASE}/uzenetek/${id}`, { method: 'DELETE' })
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error('Hiba a törlés során.');
+                        }
+                        alert('Sikeres törlés!');
+                        location.reload();
+                    })
+                    .catch(error => console.error('Hiba a törlés során:', error));
+            }
+        }
+
+        function handleModify(id) {
+            const row = document.querySelector(`tr[data-id="${id}"]`);
+            const cells = row.querySelectorAll('td');
+            const modifyButton = cells[4].querySelector('button');
+
+            if (modifyButton.textContent === 'Módosít') {
+                for (let i = 1; i < cells.length - 2; i++) {
+                    const cell = cells[i];
+                    const originalText = cell.textContent;
+                    cell.innerHTML = `<input type="text" value="${originalText}" />`;
+                }
+                modifyButton.textContent = 'Mentés';
+            } else if (modifyButton.textContent === 'Mentés') {
+                const updatedData = {
+                    nev: cells[1].querySelector('input').value,
+                    email: cells[2].querySelector('input').value,
+                    kuldes_ideje: new Date().toISOString().slice(0, 19).replace('T', ' ')
+                };
+
+                fetch(`${API_BASE}/uzenetek/${id}`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(updatedData)
+                })
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error('Hiba a mentés során.');
+                        }
+                        alert('Sikeres módosítás!');
+                        location.reload();
+                    })
+                    .catch(error => console.error('Hiba a mentés során:', error));
+            }
+        }
+
+        const messageForm = document.getElementById('message-form');
+        messageForm.addEventListener('submit', function (e) {
+            e.preventDefault();
+            const formData = new FormData(messageForm);
+
+            fetch(`${API_BASE}/uzenetek`, {
+                method: 'POST',
+                body: JSON.stringify({
+                    nev: formData.get('name'),
+                    email: formData.get('email'),
+                    uzenet: formData.get('message'),
+                    kuldes_ideje: new Date().toISOString().slice(0, 19).replace('T', ' ')
+                }),
+                headers: { 'Content-Type': 'application/json' }
+            })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Hiba az üzenet elküldése során.');
+                    }
+                    alert('Üzenet elküldve!');
+                    location.reload();
+                })
+                .catch(error => console.error('Hiba az üzenet elküldése során:', error));
+        });
+    </script>
+<!-- Footer -->
+<footer id="footer">
+    <ul class="icons">
+        <li><a href="#" class="icon brands fa-twitter"><span class="label">Twitter</span></a></li>
+        <li><a href="#" class="icon brands fa-facebook-f"><span class="label">Facebook</span></a></li>
+        <li><a href="#" class="icon brands fa-instagram"><span class="label">Instagram</span></a></li>
+        <li><a href="#" class="icon brands fa-github"><span class="label">Github</span></a></li>
+        <li><a href="#" class="icon brands fa-dribbble"><span class="label">Dribbble</span></a></li>
+        <li><a href="#" class="icon brands fa-google-plus"><span class="label">Google+</span></a></li>
+    </ul>
+    <ul class="copyright">
+        <h1>Készítette: Kardos Szabina</h1>
+        <li>&copy; Untitled. All rights reserved.</li><li>Design: <a href="http://html5up.net">HTML5 UP</a></li>
+    </ul>
+</footer>
+
+</div>
+
+<!-- Scripts -->
+<script src="assets/js/jquery.min.js"></script>
+<script src="assets/js/jquery.dropotron.min.js"></script>
+<script src="assets/js/jquery.scrollex.min.js"></script>
+<script src="assets/js/browser.min.js"></script>
+<script src="assets/js/breakpoints.min.js"></script>
+<script src="assets/js/util.js"></script>
+<script src="assets/js/main.js"></script>
+
+</body>
+</html>
+
+
+
